@@ -5,16 +5,16 @@ var translations = {
 };
 
 const specialTranslation = {
-    "Ask a question from {0}" : {
+"{0} owners {1}" : {
+        "value":"{0} के मालिकों  {1}",
+        "regex" : "(.*) owners (.*)"
+    },
+    "ask {0}" : {
         "value":"{0} से एक प्रश्न पूछें",
-        "isContainRegex":true,
-	"regex" : "Ask a question from "
+	"regex" : "^ask (.*)"
 
     },                            
-    "{0} owners" : {
-        "value":"{0} के मालिकों",
-        "regex" : " owners$"
-    },
+    
     "about {0} cars" : {
 		"value":"{0} के बारे  में",
         	"regex" : "^about (.*) cars$"
@@ -56,7 +56,7 @@ var isCheckRegex =  function(str){
             // }
             if(regexArray[i].test(str)){
                 var tempKeys = {};
-                tempKeys.keyArray = str.split(regexArray[i]);
+                //tempKeys.keyArray = str.split(regexArray[i]);
                 tempKeys.regex = regexArray[i];
             //    if(str.includes("On Road Price in")){
             //        console.log(tempKeys);
@@ -104,6 +104,7 @@ function isCheckType (key){
             return key;
     }
 function middleRegex(str,reg){
+	console.log(str,reg)
         reg+='';
         var newStr="";
         for(i=0;i<reg.length-1;i++){
@@ -114,10 +115,13 @@ function middleRegex(str,reg){
         }
         var splittedNewStrArray = newStr.split(" ");
         var indexCount=0;
+
         var splittedStrArray = str.split(" ");            
         var keyArray = [];
         var tempStr= "";
         var arrayKey="";
+	var j=0;
+	console.log(splittedNewStrArray,splittedStrArray);
         for(i in splittedStrArray){
             if(splittedStrArray[i]==splittedNewStrArray[j]){
                 if(arrayKey.length>0){
@@ -132,15 +136,21 @@ function middleRegex(str,reg){
                 tempStr+='{' + indexCount + '} '
                 j++;
                 arrayKey+=splittedStrArray[i]+' '
+		console.log(i,splittedStrArray.length-1);
                 if(i==splittedStrArray.length-1){
                     keyArray.push(arrayKey.trim());
                   }
                 indexCount++;
             }else{
+		
                 arrayKey+=splittedStrArray[i]+' '
+		if(i==splittedStrArray.length-1){
+                    keyArray.push(arrayKey.trim());
+                  }
             }                    
         }
-		return {keyArray,tempStr}
+	console.log(keyArray,tempStr);
+	return {keyArray,tempStr}
     }
 var translation = function(key){
    var str = key.trim();
@@ -149,14 +159,14 @@ var translation = function(key){
         if(!finalKeyArray){
             return finalTranslate(key);
         }
-        finalKeyArray.keyArray = removeEmptyKeyFromArray(finalKeyArray.keyArray);
-        if(finalKeyArray.keyArray.length==0){
-            var strAndArray = middleRegex(finalKeyArray.regex,str);
+
+        //finalKeyArray.keyArray = removeEmptyKeyFromArray(finalKeyArray.keyArray);
+
+
+            var strAndArray = middleRegex(str,finalKeyArray.regex);
             str = strAndArray.tempStr;
             finalKeyArray.keyArray = strAndArray.keyArray;
-        }else{
-            str=replaceOtherThenRegex(finalKeyArray.keyArray,str);
-        }   
+       
 
         var value,isContainRegex;
    
@@ -183,6 +193,5 @@ var translation = function(key){
 
 }
 
-translation("about baleno cars");
-
+translation("Jaipur owners Maruti Baleno");
 

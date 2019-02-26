@@ -147,10 +147,6 @@ var translation = function(key){
         var finalKeyArray = isCheckRegex(str)
         //console.log(finalKeyArray);
         if(!finalKeyArray){
-            for(let i in colors){
-                if(isCheckType(str).includes(colors[i]))
-                    return splitStringWithSpace(str);
-            }
             return finalTranslate(key);
         }
         finalKeyArray.keyArray = removeEmptyKeyFromArray(finalKeyArray.keyArray);
